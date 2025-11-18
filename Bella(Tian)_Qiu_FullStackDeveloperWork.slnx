@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Bella(Tian)_Qiu_FullStackDeveloperWork/Bella(Tian)_Qiu_FullStackDeveloperWork.csproj" />
+  <Project Path="FrontEnd/frontend.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>

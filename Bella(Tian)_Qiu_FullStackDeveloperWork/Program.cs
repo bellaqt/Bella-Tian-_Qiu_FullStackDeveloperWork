@@ -1,5 +1,6 @@
 ﻿using Bella_Tian__Qiu_FullStackDeveloperWork.Services;
 using Amazon.S3;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,14 +24,13 @@ builder.Services.AddAWSService<IAmazonS3>();
 
 var app = builder.Build();
 
-app.UseRouting();
-
-// ✅ 一定要在 UseAuthorization 前面
+// ✅ 放在最前
 app.UseCors();
 
+app.UseRouting();
 app.UseAuthorization();
 
-// ✅ 这里手动补上响应头（双保险）
+// ✅ 额外中间件强制返回 CORS 响应头
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Access-Control-Allow-Origin"] = "*";

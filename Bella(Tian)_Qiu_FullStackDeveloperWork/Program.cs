@@ -10,10 +10,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://13.236.207.55:5173")
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
 
@@ -24,30 +23,25 @@ builder.Services.AddAWSService<IAmazonS3>();
 
 var app = builder.Build();
 app.UseRouting();
-app.UseCors("AllowFrontend"); 
-// app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthorization();
 
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    await next();
-});
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHub<CarStatusHub>("/carStatusHub");
-    endpoints.MapMethods("{*path}", new[] { "OPTIONS" }, context =>
+    if (context.Request.Method == "OPTIONS")
     {
         context.Response.StatusCode = 200;
         context.Response.Headers.Add("Access-Control-Allow-Origin", "http://13.236.207.55:5173");
-        context.Response.Headers.Add("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-        return Task.CompletedTask;
-    });
+        context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        await context.Response.CompleteAsync();
+        return;
+    }
+
+    await next();
 });
+
+app.MapControllers();
+app.MapHub<CarStatusHub>("/carStatusHub");
 
 app.Run("http://0.0.0.0:5000");

@@ -6,7 +6,7 @@ export default function Home() {
     const [selectedMake, setSelectedMake] = useState("");
 
     useEffect(() => {
-        fetch('${API_BASE_URL}/cars')
+        fetch("${API_BASE_URL}/cars")
             .then(res => res.json())
             .then(setCars);
     }, []);

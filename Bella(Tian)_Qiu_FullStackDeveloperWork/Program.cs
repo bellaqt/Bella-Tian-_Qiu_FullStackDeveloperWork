@@ -7,12 +7,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy
-            .WithOrigins("http://13.236.207.55:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -22,24 +21,12 @@ builder.Services.AddSignalR();
 builder.Services.AddAWSService<IAmazonS3>();
 
 var app = builder.Build();
+
 app.UseRouting();
-app.UseCors("AllowFrontend");
+
+app.UseCors();
+
 app.UseAuthorization();
-
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.StatusCode = 200;
-        context.Response.Headers.Add("Access-Control-Allow-Origin", "http://13.236.207.55:5173");
-        context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        await context.Response.CompleteAsync();
-        return;
-    }
-
-    await next();
-});
 
 app.MapControllers();
 app.MapHub<CarStatusHub>("/carStatusHub");

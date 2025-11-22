@@ -5,7 +5,7 @@ function Cars() {
     const [cars, setCars] = useState([]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/cars`)
+        fetch(`http://13.236.207.55:5000/cars`)
             .then(res => res.json())
             .then(setCars)
             .catch(err => console.error("Fetch error:", err));

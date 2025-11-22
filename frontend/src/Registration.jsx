@@ -7,7 +7,7 @@ export default function Registration() {
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl("${API_BASE_URL}/carStatusHub")
+            .withUrl(`${API_BASE_URL}/carStatusHub`)
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();

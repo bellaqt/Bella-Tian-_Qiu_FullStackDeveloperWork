@@ -8,7 +8,7 @@ export default function UploadToS3() {
         if (!file) return alert("请选择文件");
 
         // Step 1: 向后端请求 presigned URL
-        const res = await fetch("${API_BASE_URL}/presign?key=" + file.name);
+        const res = await fetch(`${API_BASE_URL}/presign?key=` + file.name);
         const { url } = await res.json();
 
         // Step 2: 使用 PUT 上传文件到 S3

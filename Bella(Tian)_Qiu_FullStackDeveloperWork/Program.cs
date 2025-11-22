@@ -27,6 +27,7 @@ app.UseRouting();
 app.UseCors();
 
 app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapControllers();
 app.MapHub<CarStatusHub>("/carStatusHub");

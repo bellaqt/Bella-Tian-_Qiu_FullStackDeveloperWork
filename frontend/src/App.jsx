@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Home from "./Home"
 import Registration from "./Registration";
+import UploadToS3 from "./UploadToS3";
 
 function App() {
     const [count, setCount] = useState(0)
@@ -18,6 +19,7 @@ function App() {
         <div>
             <h1>Cars</h1>
             <Home />
+            <UploadToS3 />
         </div>
     );
 }

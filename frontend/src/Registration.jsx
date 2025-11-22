@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { API_BASE_URL } from "./config";
 
 export default function Registration() {
     const [cars, setCars] = useState([]);
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl("http://localhost:5146/carStatusHub")
+            .withUrl('${API_BASE_URL}/carStatusHub')
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();

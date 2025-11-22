@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "./config";
 
 export default function Home() {
     const [cars, setCars] = useState([]);
     const [selectedMake, setSelectedMake] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:5146/cars")
+        fetch('${API_BASE_URL}/cars')
             .then(res => res.json())
             .then(setCars);
     }, []);

@@ -51,5 +51,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<CarStatusHub>("/carStatusHub");
 
-app.Run();
+app.Run("http://0.0.0.0:5000");
 Console.WriteLine("AWS Region = " + builder.Configuration["AWS:Region"]);

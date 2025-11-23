@@ -1,0 +1,24 @@
+# ====== 构建 React 前端 ======
+FROM node:18 AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ .
+RUN npm run build
+
+# ====== 构建 .NET 后端 ======
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY backend/*.csproj .
+RUN dotnet restore
+COPY backend/ .
+RUN dotnet publish -c Release -o /app/publish
+
+# ====== 最终运行阶段 ======
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+COPY --from=frontend-build /app/frontend/dist ./wwwroot
+EXPOSE 5000
+ENV ASPNETCORE_URLS=http://+:5000
+ENTRYPOINT ["dotnet", "Bella_Tian__Qiu_FullStackDeveloperWork.dll"]
